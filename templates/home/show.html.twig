@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Met Museum Collection{% endblock %}
+
+{% block body %}
+<section>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-2" style="background: #202020">
+             {% for departmentObject in departmentObjects| slice(0,1) %}
+                <h2 class="mt-5 pt-5 pl-2">{{ departmentObject.department }}</h2>
+                {%endfor%}
+                <div class="hashtagdiv">
+                    <h3>#artcollection</h3>
+                    <h3>#metmuseum</h3>
+                    
+                </div>
+            </div>
+            <div class="col-10" style="height: 100vh">
+        <div class="row justify-content-start scrolling-wrapper-flexbox" style="padding-top: 4em">
+            <div class="scroll-arrow" id="scroll-left">
+            </div>
+            <ul id="imgList" class="ul-scroll">
+                {% for departmentObject in departmentObjects %}
+                <li class="li-scroll">
+                        <div class="card m-5" style="width: 20rem;">
+                           <img class="imageCard" style="height: 350px; width:318px; object-fit:cover"; 
+                             src="{{ departmentObject.primaryImage}}" alt="{{ departmentObject.objectName }}">
+                            <div class="card-body ">
+                               <h5 class="card-title">{{ departmentObject.objectName |length > 25 ? departmentObject.objectName |slice(0, 25) ~ '...' : departmentObject.objectName }}</h5>
+                               <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal{{departmentObject.objectID}}">Know more</button>
+
+<div>
+<!--modal-->
+                  {% for departmentObject in departmentObjects %}
+        <div class="modal fade" id="modal{{departmentObject.objectID}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title font-weight-bold"" id="exampleModalLabel">{{ departmentObject.objectName }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <img class="imageCard" style="height: 250px; width:450px object-fit:cover"; 
+                             src="{{ departmentObject.primaryImage}}" alt="{{ departmentObject.objectName }}">
+                        <p><span class="font-weight-bold">Title :</span> {{ departmentObject.classification}} </p>
+                        <p><span class="font-weight-bold">Date/period :</span>  {{ departmentObject.objectDate}} </p>
+                        <p><span class="font-weight-bold">Medium :</span>  {{ departmentObject.medium}} </p>
+                        <p><span class="font-weight-bold">Dimensions :</span> {{ departmentObject.dimensions}} </p>
+                        <p><span class="font-weight-bold">Artist : </span> {% if departmentObject.artistDisplayName is empty%}Unknown {%else%} {{departmentObject.artistDisplayName }}<br>{{departmentObject.artistDisplayBio}}{%endif%} </p>
+                        {% if departmentObject.objectWikidata_URL is not empty%}
+                        <p><span class="font-weight-bold">Wiki : </span> {{ departmentObject.objectWikidata_URL}}</p>
+                        {%endif%}    
+                         {% if departmentObject.artistWikidata_URL is not empty%}
+                        <p><span class="font-weight-bold">Wiki : </span> {{ departmentObject.artistWikidata_URL}}</p>
+                        {%endif%}            
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+
+                            </div>
+                        </div>
+                </li>
+
+
+                {% endfor %}
+            </ul>
+            <div class="scroll-arrow" id="scroll-right" onclick="scrollRight()">
+            </div>
+        </div>
+
+     </div>
+        </div>
+        </div>
+
+</section>
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('scroll') }}
+{% endblock %}

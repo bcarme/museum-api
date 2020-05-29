@@ -2,9 +2,12 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Service\ApiService;
+use App\Service\Slug;
 
 class HomeController extends AbstractController
 {
@@ -15,17 +18,22 @@ class HomeController extends AbstractController
     {
         $department = $apiService->findDepartment();
         return $this->render('home/index.html.twig', [
-            'department'=>$department
+            'department' => $department
         ]);
-    }show
+    }
 
     /**
-     * @Route("/", name="home")
+     * @param int $id
+     * @return Response
+     * @Route("/show/{id<^[0-9-]+$>}", defaults={"id" = null}, name="show")
      */
-    public function show(ApiService $apiService)
+    public function show(ApiService $apiService, $id):Response
     {
         $department = $apiService->findDepartment();
-        return $this->render('home/index.html.twig', [
+        $departmentObjects = $apiService->findArtworksByDpt($id);
+
+        return $this->render('home/show.html.twig', [
+            'departmentObjects'=>$departmentObjects,
             'department'=>$department
         ]);
     }

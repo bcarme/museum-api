@@ -11,8 +11,8 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class ApiService
 {
-    const MAX_ARTWORK = 20;
-    const MIN_ARTWORK = 2;
+    const MAX_ARTWORK = 15;
+    const MIN_ARTWORK = 1;
 
     public function findDepartment()
     {
@@ -20,22 +20,43 @@ class ApiService
         $response = $client->request('GET', 'https://collectionapi.metmuseum.org/public/collection/v1/departments');
         $content = $response->toArray();
 
-        for($i=0; $i<count($content['departments']); $i++){
+        for($i=0; $i<count($content); $i++){
             $departmentList[] = $content['departments'][$i]['displayName'];
             $department = array_rand(array_flip($departmentList), 1);
         }
         return $department;
+
     }
 
-    public function findDptArtworks(int $id)
+    public function findArtworksByDpt($id)
     {
         $client = HttpClient::create();
-        $response = $client->request('GET', self::API_URL . 'objects/' . $id);
+        $response = $client->request('GET', 'https://collectionapi.metmuseum.org/public/collection/v1/search?departmentId=' .$id .'&q=cat');
 
-        $apiArtwork = $response->toArray();
+        if($response->getStatusCode() === Response::HTTP_OK) {
+            $apiArtworks = $response->toArray()['objectIDs'];
 
-        return $apiArtwork;
-    }
+            if(!empty($apiArtworks) && count($apiArtworks) >= self::MIN_ARTWORK) {
+                $randowKeys = array_rand($apiArtworks, self::MAX_ARTWORK);
+
+                foreach ($randowKeys as $key) {
+                    $artworkApiId = $apiArtworks[$key];
+                    $artworks[] = $this->findArtwork($artworkApiId);
+                }
+            }
+        }
+
+        return $artworks ?? [];
+     }
+
+        public function findArtwork(int $id)
+        {
+            $client = HttpClient::create();
+            $response = $client->request('GET', 'https://collectionapi.metmuseum.org/public/collection/v1/objects/'. $id);
+            $apiArtwork = $response->toArray();
+
+            return $apiArtwork;
+        }
 
 
 }
