@@ -29,9 +29,18 @@ h2{
 
 h3{
   font-family: 'Poppins', sans-serif;
-  font-size: 1.6em;
+  font-size: 1em;
   font-weight:bold;
   color:white;
+}
+
+a{
+  text-decoration: none !important;
+}
+
+a:link, a:visited, a:hover, a:focus, a:active{
+  color:#FC4254 !important;
+  text-decoration: none !important;
 }
 
 .circle {
@@ -168,7 +177,13 @@ h3{
   padding-top: 150px;
 }
 
-.modal-body{
-  word-wrap: break-word;
-  
+.modal-body p{
+  overflow-wrap: break-spaces;
+  white-space: normal;
+}
+
+.modalImg{
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 12px;
 }

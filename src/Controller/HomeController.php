@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Service\ApiService;
 use App\Service\Slug;
+use App\Service\Hashtag;
 
 class HomeController extends AbstractController
 {
@@ -16,25 +17,25 @@ class HomeController extends AbstractController
      */
     public function index(ApiService $apiService)
     {
-        $department = $apiService->findDepartment();
+        $departments = $apiService->findDepartment();
         return $this->render('home/index.html.twig', [
-            'department' => $department
+            'departments' => $departments,
         ]);
     }
 
     /**
      * @param int $id
+     * @param string $string
      * @return Response
-     * @Route("/show/{id<^[0-9-]+$>}", defaults={"id" = null}, name="show")
+     * @Route("/show/{string}/{id<^[0-9-]+$>}", defaults={"id" = null}, name="show")
      */
-    public function show(ApiService $apiService, $id):Response
+    public function show(ApiService $apiService, Hashtag $hastag, $id, $string):Response
     {
-        $department = $apiService->findDepartment();
         $departmentObjects = $apiService->findArtworksByDpt($id);
-
+        $hash = $hastag->generateHashtag($string);
         return $this->render('home/show.html.twig', [
             'departmentObjects'=>$departmentObjects,
-            'department'=>$department
+            'hash'=>$hash,
         ]);
     }
 }
