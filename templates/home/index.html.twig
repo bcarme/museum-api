@@ -9,7 +9,7 @@
         <h1 class="text-right">Welcome to the<br>Virtual Met Museum</h1>
         <h2 class="text-right">Let's discover
     {% for key, value in departments %}
-        <span class="title"><a href="{{ path('show', {'string': value.displayName | slugify, 'id' : value.departmentId }) }}">{{ value.displayName}}</a></span></h2
+        <a href="{{ path('show', {'string': value.displayName | slugify, 'id' : value.departmentId }) }}">{{ value.displayName}}</a></h2
     {% endfor %}
         <div class="ringring2"></div>
         <div class="circle2"></div>
