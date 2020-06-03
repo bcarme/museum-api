@@ -1,5 +1,5 @@
-// any CSS you require will output into a single css file (app.css in this case)
-require('../css/app.css');
+// any CSS you require will output into a single scss file (app.scss in this case)
+require('../scss/app.scss');
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to require it.
 // eslint-disable-next-line no-unused-vars
